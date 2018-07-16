@@ -343,8 +343,7 @@ function create_systemd_configuration() {
 
 			Type=forking
 			PIDFile=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid
-			ExecStart=${MNODE_DAEMON} -daemon -pid=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid \
-			-conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM}
+			ExecStart=${MNODE_DAEMON} -daemon -pid=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM}
 
 			Restart=always
 			RestartSec=5
@@ -664,6 +663,11 @@ function prepare_mn_interfaces() {
     if [ ! -f /sys/class/net/${ETH_INTERFACE}/operstate ]; then
         echo "Default interface doesn't exist, switching to eth0"
         export ETH_INTERFACE="eth0"
+    fi
+
+    # check for the nuse case <3
+    if [ -f /sys/class/net/ens160/operstate ]; then
+        export ETH_INTERFACE="ens160"
     fi
 
     # get the current interface state
