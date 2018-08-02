@@ -5,7 +5,7 @@
 #  ██║╚██╗██║██║   ██║██║  ██║██╔══╝  ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗
 #  ██║ ╚████║╚██████╔╝██████╔╝███████╗██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║
 #  ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
-#                                                              ╚╗ @marsmensch 2016-2018 ╔╝
+#                              ╚╗ @marsmensch 2016-2018, additions thecrypt0hunter 2018 ╔╝
 #
 # version 	v0.9.9
 # date    	2018-06-09
@@ -19,7 +19,6 @@
 #               - Linux Ubuntu 16.04 LTS ONLY on a Vultr, Hetzner or DigitalOcean VPS
 #               - Generic Ubuntu support will be added at a later point in time
 #
-# Twitter 	@marsmensch
 
 # Useful variables
 declare -r CRYPTOS=`ls -l config/ | egrep '^d' | awk '{print $9}' | xargs echo -n; echo`
@@ -40,11 +39,9 @@ cat << "EOF"
  ██║╚██╗██║██║   ██║██║  ██║██╔══╝  ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗
  ██║ ╚████║╚██████╔╝██████╔╝███████╗██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║
  ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
-                                                             ╚╗ @marsmensch 2016-2018 ╔╝
+#                            ╚╗ @marsmensch 2016-2018, additions thecrypt0hunter 2018 ╔╝
 EOF
-echo "$(tput sgr0)$(tput setaf 3)Have fun, this is crypto after all!$(tput sgr0)"
-echo "$(tput setaf 6)Donations (BTC): 33ENWZ9RCYBG7nv6ac8KxBUSuQX64Hx3x3"
-echo "Questions: marsmensch@protonmail.com$(tput sgr0)"
+echo "$(tput setaf 6)Donations (BTC): 32Qwd14zNT6Zz5JpsrPTaAMB2WcirEPE5F"
 }
 
 # /*
@@ -590,7 +587,7 @@ function build_mn_from_source() {
                     rm -f ${MNODE_DAEMON}
                     # old daemon must be removed before compilation. Would be better to remove it afterwards, however not possible with current structure
                     if [ -f ${MNODE_DAEMON} ]; then
-                            echo "UPDATE FAILED! Daemon ${MNODE_DAEMON} couldn't be removed. Please open an issue at https://github.com/masternodes/vps/issues. Thank you!"
+                            echo "UPDATE FAILED! Daemon ${MNODE_DAEMON} couldn't be removed!"
                             exit 1
                     fi
                 fi
@@ -603,7 +600,7 @@ function build_mn_from_source() {
 
         # if it's not available after compilation, theres something wrong
         if [ ! -f ${MNODE_DAEMON} ]; then
-                echo "COMPILATION FAILED! Please open an issue at https://github.com/masternodes/vps/issues. Thank you!"
+                echo "COMPILATION FAILED!"
                 exit 1
         fi
 }

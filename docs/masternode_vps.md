@@ -193,3 +193,4 @@ or send BTC to:
 ```
 BTC  33ENWZ9RCYBG7nv6ac8KxBUSuQX64Hx3x3
 ```
+* Left as is, including ref links & BTC donation address.

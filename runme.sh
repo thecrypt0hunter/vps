@@ -5,19 +5,18 @@
 #  ██║╚██╗██║██║   ██║██║  ██║██╔══╝  ██║╚██╔╝██║██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗
 #  ██║ ╚████║╚██████╔╝██████╔╝███████╗██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║
 #  ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
-#                                                              ╚╗ @marsmensch 2016-2017 ╔╝                   				           
+#                              ╚╗ @marsmensch 2016-2018, additions thecrypt0hunter 2018 ╔╝
 #
 # version: 	0.5-beta
 # date:    	2017-10-21
 # function:	part of the masternode scripts, source the proper config file
 #
-# Twitter: 	@marsmensch
-#                                                                      
+#
 # 	Instructions:
 #               Run this script and wait. After a while you should have a working
 #               masternode setup where only the private keys need to be added.
 #
-#	Platforms: 	
+#	Platforms:
 #               - Linux Ubuntu 16.04 LTS ONLY on a Vultr VPS (its by far the cheapest option)
 #               - Generic Ubuntu support will be added at a later point in time
 #
