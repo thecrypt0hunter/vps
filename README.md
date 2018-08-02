@@ -7,10 +7,7 @@ This is the single best and almost effortless way to setup different crypto mast
 If this script helped you in any way, please contribute some feedback. BTC donations also welcome and never forget:
 
 ```
-Bitcoin: 32Qwd14zNT6Zz5JpsrPTaAMB2WcirEPE5F
-Litecoin: LVAzjE5xh6xpUiiUiWt1kVTG11QFotzdR2
-Dash: XgnuHKWTUTza5Ms7oazQeCjo9WBXwYctf5
-Ethereum: 0x4F6ca599Fdf9ED6f2d31f80571DC39Da8d622D63
+Bitcoin: 3JvDfxdrfX6earzHVGVJZhuzCA4Y8xFTP8
 ```
 
 **NOTE on the VPS choice for starters**

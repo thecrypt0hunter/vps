@@ -41,7 +41,7 @@ cat << "EOF"
  ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
 #                            ╚╗ @marsmensch 2016-2018, additions thecrypt0hunter 2018 ╔╝
 EOF
-echo "$(tput setaf 6)Donations (BTC): 32Qwd14zNT6Zz5JpsrPTaAMB2WcirEPE5F"
+echo "$(tput setaf 6)Donations Bitcoin: 3JvDfxdrfX6earzHVGVJZhuzCA4Y8xFTP8"
 }
 
 # /*
