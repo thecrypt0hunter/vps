@@ -250,7 +250,7 @@ function configure_firewall() {
     ufw logging on                            &>> ${SCRIPT_LOGFILE}
     ufw allow ${SSH_INBOUND_PORT}/tcp         &>> ${SCRIPT_LOGFILE}
     # required for cockpit
-    ufw allow 9090                            &>> ${SCRIPT_LOGFILE}
+    ufw allow 9090/tcp                            &>> ${SCRIPT_LOGFILE}
     # KISS, its always the same port for all interfaces
     ufw allow ${MNODE_INBOUND_PORT}/tcp       &>> ${SCRIPT_LOGFILE}
     # This will only allow 6 connections every 30 seconds from the same IP address.
