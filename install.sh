@@ -146,6 +146,20 @@ else
 fi
 }
 
+function installFail2Ban() {
+    echo
+    echo "* Installing fail2ban. Please wait..."
+    sudo apt-get -y install fail2ban &>> ${SCRIPT_LOGFILE}
+    sudo systemctl enable fail2ban &>> ${SCRIPT_LOGFILE}
+    sudo systemctl start fail2ban &>> ${SCRIPT_LOGFILE}
+}
+
+function installCockpit() {
+    echo
+    echo "* Installing Cockpit. Please wait..."
+    sudo apt-get install cockpit &>> ${SCRIPT_LOGFILE}
+}
+
 #
 # /* no parameters, creates and activates a dedicated masternode user */
 #
@@ -198,7 +212,7 @@ function create_sentinel_setup() {
 		git pull                      &>> ${SCRIPT_LOGFILE}
 		rm -f rm sentinel.conf        &>> ${SCRIPT_LOGFILE}
 	fi
-	
+
 	# create a globally accessible venv and install sentinel requirements
 	virtualenv --system-site-packages ${SENTINEL_ENV}      &>> ${SCRIPT_LOGFILE}
 	${SENTINEL_ENV}/bin/pip install -r requirements.txt    &>> ${SCRIPT_LOGFILE}
@@ -235,6 +249,8 @@ function configure_firewall() {
     ufw default deny                          &>> ${SCRIPT_LOGFILE}
     ufw logging on                            &>> ${SCRIPT_LOGFILE}
     ufw allow ${SSH_INBOUND_PORT}/tcp         &>> ${SCRIPT_LOGFILE}
+    # required for cockpit
+    ufw allow 9090                            &>> ${SCRIPT_LOGFILE}
     # KISS, its always the same port for all interfaces
     ufw allow ${MNODE_INBOUND_PORT}/tcp       &>> ${SCRIPT_LOGFILE}
     # This will only allow 6 connections every 30 seconds from the same IP address.
@@ -517,6 +533,8 @@ function source_config() {
         if [ "$update" -eq 0 ]; then
             prepare_mn_interfaces
             swaphack
+            installFail2Ban
+            installCockpit
         fi
         install_packages
         print_logo
@@ -594,6 +612,7 @@ function build_mn_from_source() {
 
                 # compilation starts here
                 source ${SCRIPTPATH}/config/${CODENAME}/${CODENAME}.compile | pv -t -i0.1
+                strip ${MNODE_DAEMON}
         else
                 echo "* Daemon already in place at ${MNODE_DAEMON}, not compiling"
         fi
