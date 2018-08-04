@@ -157,7 +157,7 @@ function installFail2Ban() {
 function installCockpit() {
     echo
     echo "* Installing Cockpit. Please wait..."
-    sudo apt-get install cockpit &>> ${SCRIPT_LOGFILE}
+    sudo apt-get install cockpit-y &>> ${SCRIPT_LOGFILE}
 }
 
 #
