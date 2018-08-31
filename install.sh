@@ -117,12 +117,11 @@ function install_packages() {
     libboost-all-dev libssl-dev make autoconf libtool git apt-utils g++ \
     libprotobuf-dev pkg-config libcurl3-dev libudev-dev libqrencode-dev bsdmainutils \
     pkg-config libssl-dev libgmp3-dev libevent-dev jp2a pv virtualenv libdb4.8-dev libdb4.8++-dev  &>> ${SCRIPT_LOGFILE}
-    
+
     # only for 18.04 // openssl
     if [[ "${VERSION_ID}" == "18.04" ]] ; then
        apt-get -qqy -o=Dpkg::Use-Pty=0 -o=Acquire::ForceIPv4=true install libssl1.0-dev
-    fi    
-    
+    fi
 }
 
 #
@@ -174,7 +173,6 @@ function create_mn_user() {
     fi
 
 }
-
 #
 # /* no parameters, creates a masternode data directory (one per masternode)  */
 #
@@ -189,9 +187,7 @@ function create_mn_dirs() {
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
         fi
     done
-
 }
-
 #
 # /* no parameters, creates a sentinel config for a set of masternodes (one per masternode)  */
 #
@@ -357,7 +353,7 @@ function create_systemd_configuration() {
 			Type=forking
 			PIDFile=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid
 			ExecStart=${MNODE_DAEMON} -daemon -pid=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM}
-
+			ExecStart=${MNODE_DAEMON:0:${#MNODE_DAEMON}-1}-cli -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM} stop
 			Restart=always
 			RestartSec=5
 			PrivateTmp=true
