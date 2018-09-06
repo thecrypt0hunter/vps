@@ -49,6 +49,14 @@ echo "$(tput setaf 6)Donations Bitcoin: 3JvDfxdrfX6earzHVGVJZhuzCA4Y8xFTP8"
 # get_confirmation && COMMAND_TO_RUN or prepend a message
 # */
 #
+
+function check_root() {
+if [ "$(id -u)" != "0" ]; then
+    echo "Sorry, this script needs to be run as root. Do \"sudo install.sh\""
+    exit 1
+fi
+}
+
 function get_confirmation() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure? [y/N]} " response
@@ -158,6 +166,17 @@ function installCockpit() {
     echo "* Installing Cockpit. Please wait..."
     sudo apt-get install cockpit-y &>> ${SCRIPT_LOGFILE}
 }
+
+function installTOR() {
+    echo
+    echo "* Installing TOR. Please wait..."
+
+
+
+
+
+}
+
 
 #
 # /* no parameters, creates and activates a dedicated masternode user */
