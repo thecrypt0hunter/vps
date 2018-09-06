@@ -159,6 +159,11 @@ function installFail2Ban() {
     sudo apt-get -y install fail2ban &>> ${SCRIPT_LOGFILE}
     sudo systemctl enable fail2ban &>> ${SCRIPT_LOGFILE}
     sudo systemctl start fail2ban &>> ${SCRIPT_LOGFILE}
+    # Add Fail2Ban memory hack if needed
+    if ! grep -q "ulimit -s 256" /etc/default/fail2ban; then
+        echo "ulimit -s 256" | sudo tee -a /etc/default/fail2ban
+        sudo systemctl restart fail2ban
+    fi
 }
 
 function installCockpit() {
@@ -181,6 +186,9 @@ function installUnattendedUpgrades() {
     sudo sh -c 'echo "APT::Periodic::AutocleanInterval "7";" >> /etc/apt/apt.conf.d/20auto-upgrades'
     sudo sh -c 'echo "APT::Periodic::Unattended-Upgrade "1";" >> /etc/apt/apt.conf.d/20auto-upgrades'
 }
+
+
+
 
 #
 # /* no parameters, creates and activates a dedicated masternode user */
@@ -447,13 +455,6 @@ function cleanup_after() {
     sysctl -p
 
 }
-
-function installTOR() {
-    echo
-    echo "* Installing TOR. Please wait..."
-    sudo apt-get install tor -y &>> ${SCRIPT_LOGFILE}
-
-
 
 #
 # /* project as parameter, sources the project specific parameters and runs the main logic */
