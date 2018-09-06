@@ -88,6 +88,7 @@ function show_help(){
     echo "-s or --sentinel: Add sentinel monitoring for a node type. Combine with the -p option";
     echo "-w or --wipe: Wipe ALL local data for a node type. Combine with the -p option";
     echo "-u or --update: Update a specific masternode daemon. Combine with the -p option";
+    echo "-t or --TOR: Option to install TOR";
     echo "-r or --release: Release version to be installed.";
     echo "-x or --startnodes: Start masternodes after installation to sync with blockchain";
     exit 1;
@@ -185,10 +186,47 @@ function installUnattendedUpgrades() {
     sudo sh -c 'echo "        "${distro_id}:${distro_codename}-security";" >> /etc/apt/apt.conf.d/50unattended-upgrades'
     sudo sh -c 'echo "APT::Periodic::AutocleanInterval "7";" >> /etc/apt/apt.conf.d/20auto-upgrades'
     sudo sh -c 'echo "APT::Periodic::Unattended-Upgrade "1";" >> /etc/apt/apt.conf.d/20auto-upgrades'
+    cat /etc/apt/apt.conf.d/20auto-upgrades &>> ${SCRIPT_LOGFILE}
 }
 
+function installTOR() {
+    echo
+    echo "* Installing TOR. Please wait..."
+    sudo apt-get install tor -y &>> ${SCRIPT_LOGFILE}
 
+    ## Setup torrc file
+    sudo sh -c 'echo "### XERONET ROCKET TORRC for BWK ###" >> /etc/tor/torrc'
+    sudo sh -c 'echo "HiddenServiceDir /var/lib/tor/hidden_service/" >> /etc/tor/torrc'
+    sudo sh -c 'echo "ClientOnly 1" >> /etc/tor/torrc'
+    sudo sh -c 'echo "ControlPort 9051" >> /etc/tor/torrc'
+    sudo sh -c 'echo "NumEntryGuards 4" >> /etc/tor/torrc'
+    sudo sh -c 'echo "NumDirectoryGuards 3" >> /etc/tor/torrc'
+    sudo sh -c 'echo "GuardLifetime 2764800" >> /etc/tor/torrc'
+    sudo sh -c 'echo "GeoIPExcludeUnknown 1" >> /etc/tor/torrc'
+    sudo sh -c 'echo "EntryNodes 31.185.104.19/32,31.185.104.20/31,46.182.106.190/32,51.15.13.245/32,51.15.43.232/32,51.15.44.197/32,51.15.45.97/32,51.15.46.49/32,51.15.50.133/32,51.15.57.177/32,51.15.57.79/32,51.15.60.255/32,51.15.60.62/32,62.102.148.67/32,62.138.7.171/32,77.109.139.87/32,78.142.140.242/32,80.67.172.162/32,81.7.10.29/32,82.94.251.227/32,85.248.227.163/32,85.248.227.164/31,86.59.119.83/32,86.59.119.88/32,89.234.157.254/32,91.121.23.100/32,94.140.120.44/32,94.242.246.23/32,94.242.246.24/32,94.252.114.48/32,95.142.161.63/32,134.119.3.164/32,171.25.193.20/32,171.25.193.25/32,171.25.193.77/32,171.25.193.78/32,176.10.104.240/32,176.10.104.243/32,176.126.252.11/32,176.126.252.12/32,178.16.208.55/32,178.16.208.56/30,178.16.208.60/31,178.16.208.62/32,178.20.55.16/32,178.20.55.18/32,178.209.42.84/32,185.100.84.82/32,185.100.86.100/32,185.34.33.2/32,185.86.149.75/32,188.118.198.244/32,192.36.27.4/32,192.36.27.6/31,192.42.116.16/32,212.51.156.78/32" >> /etc/tor/torrc'
+    sudo sh -c 'echo "ExitNodes 31.185.104.19/32,31.185.104.20/31,46.182.106.190/32,51.15.43.232/32,51.15.44.197/32,51.15.45.97/32,51.15.46.49/32,51.15.50.133/32,51.15.57.177/32,51.15.57.79/32,51.15.60.255/32,51.15.60.62/32,62.102.148.67/32,77.109.139.87/32,80.67.172.162/32,85.248.227.163/32,85.248.227.164/31,89.234.157.254/32,94.242.246.23/32,94.242.246.24/32,95.142.161.63/32,171.25.193.20/32,171.25.193.25/32,171.25.193.77/32,171.25.193.78/32,176.10.104.240/32,176.10.104.243/32,176.126.252.11/32,176.126.252.12/32,178.20.55.16/32,178.20.55.18/32,178.209.42.84/32,185.100.84.82/32,185.100.86.100/32,185.34.33.2/32,192.36.27.4/32,192.36.27.6/31,192.42.116.16/32,212.16.104.33/32" >> /etc/tor/torrc'
+    sudo sh -c 'echo "ExcludeNodes default,Unnamed,{ae},{af},{ag},{ao},{az},{ba},{bb},{bd},{bh},{bi},{bn},{bt},{bw},{by},{cd},{cf},{cg},{ci},{ck},{cm},{cn},{cu},{cy},{dj},{dm},{dz},{eg},{er},{et},{fj},{ga},{gd},{gh},{gm},{gn},{gq},{gy},{hr},{ht},{id},{in},{iq},{ir},{jm},{jo},{ke},{kg},{kh},{ki},{km},{kn},{kp},{kw},{kz},{la},{lb},{lc},{lk},{lr},{ly},{ma},{me},{mk},{ml},{mm},{mr},{mu},{mv},{mw},{my},{na},{ng},{om},{pg},{ph},{pk},{ps},{qa},{rs},{ru},{rw},{sa},{sb},{sd},{sg},{si},{sl},{sn},{so},{st},{sy},{sz},{td},{tg},{th},{tj},{tm},{tn},{to},{tr},{tt},{tv},{tz},{ug},{uz},{vc},{ve},{vn},{ws},{ye},{zm},{zw},{??}" >> /etc/tor/torrc'
+    sudo sh -c 'echo "ExcludeExitNodes default,Unnamed,{ae},{af},{ag},{ao},{az},{ba},{bb},{bd},{bh},{bi},{bn},{bt},{bw},{by},{cd},{cf},{cg},{ci},{ck},{cm},{cn},{cu},{cy},{dj},{dm},{dz},{eg},{er},{et},{fj},{ga},{gd},{gh},{gm},{gn},{gq},{gy},{hr},{ht},{id},{in},{iq},{ir},{jm},{jo},{ke},{kg},{kh},{ki},{km},{kn},{kp},{kw},{kz},{la},{lb},{lc},{lk},{lr},{ly},{ma},{me},{mk},{ml},{mm},{mr},{mu},{mv},{mw},{my},{na},{ng},{om},{pg},{ph},{pk},{ps},{qa},{rs},{ru},{rw},{sa},{sb},{sd},{sg},{si},{sl},{sn},{so},{st},{sy},{sz},{td},{tg},{th},{tj},{tm},{tn},{to},{tr},{tt},{tv},{tz},{ug},{uz},{vc},{ve},{vn},{ws},{ye},{zm},{zw},{??}" >> /etc/tor/torrc'
+    sudo sh -c 'echo "HiddenServiceDir /var/lib/tor/hidden_service/" >> /etc/tor/torrc'
+    sudo sh -c 'echo "HiddenServicePort 52543 127.0.0.1:52543" >> /etc/tor/torrc'
+    sudo sh -c 'echo "HiddenServicePort 80 127.0.0.1:80" >> /etc/tor/torrc'
+    sudo sh -c 'echo "LongLivedPorts 80,52543" >> /etc/tor/torrc'
 
+    ## Add Tor check to crontab
+    sudo /etc/init.d/tor stop &>> ${SCRIPT_LOGFILE}
+    sleep 1
+    sudo touch /etc/cron.d/torcheck &>> ${SCRIPT_LOGFILE}
+    sudo sh -c 'echo "*/5 * * * * root /etc/init.d/tor start > /dev/null 2>&1" >> /etc/cron.d/torcheck' ### CHECK ME or USE CRONTAB -e
+    sudo rm -R /var/lib/tor/hidden_service &>> ${SCRIPT_LOGFILE}
+    sudo /etc/init.d/tor start &>> ${SCRIPT_LOGFILE}
+    echo "Tor installed, configured and restarted"
+
+    # Get the .onion address and log .
+    ONION_ADDR=$( sudo cat /var/lib/tor/hidden_service/hostname )
+    echo "Onion Address: ${ONION_ADDR}" &>> ${SCRIPT_LOGFILE}
+    #Check Tor status and log
+    curl --socks5 localhost:9050 --socks5-hostname localhost:9050 -s https://check.torproject.org/ | cat | grep -m 1 Congratulations | xargs  &>> ${SCRIPT_LOGFILE}
+}
 
 #
 # /* no parameters, creates and activates a dedicated masternode user */
@@ -257,13 +295,11 @@ function create_sentinel_setup() {
 
     export SENTINEL_CONFIG=${SENTINEL_BASE}/${CODENAME}${NUM}_sentinel.conf; cd ${SENTINEL_BASE} && ${SENTINEL_ENV}/bin/python ${SENTINEL_BASE}/bin/sentinel.py
 
-
     echo "$(tput sgr0)$(tput setaf 3)Generated a Sentinel config for you. To activate Sentinel run:$(tput sgr0)"
     echo "$(tput sgr0)$(tput setaf 2)export SENTINEL_CONFIG=${SENTINEL_BASE}/${CODENAME}${NUM}_sentinel.conf; cd ${SENTINEL_BASE} && ${SENTINEL_ENV}/bin/python ${SENTINEL_BASE}/bin/sentinel.py$(tput sgr0)"
     echo ""
     echo "$(tput sgr0)$(tput setaf 2)If it works, add the command as cronjob:  $(tput sgr0)"
     echo "$(tput sgr0)$(tput setaf 2)* * * * * export SENTINEL_CONFIG=${SENTINEL_BASE}/${CODENAME}${NUM}_sentinel.conf; cd ${SENTINEL_BASE} && ${SENTINEL_ENV}/bin/python ${SENTINEL_BASE}/bin/sentinel.py 2>&1 >> /var/log/sentinel/sentinel-cron.log$(tput sgr0)"
-
 }
 
 #
@@ -341,6 +377,16 @@ function create_mn_configuration() {
                     #uncomment masternode= and masternodeprivkey= so the node can autostart and sync
                     sed 's/\(^.*masternode\(\|privkey\)=.*$\)/#\1/' -i ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf
                 fi
+                ### Update coin.conf with TOR config
+                if [ "$TOR" -eq 1 ]; then
+                    sudo sh -c 'echo "### TOR CONFIG ###" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "onion=127.0.0.1:9050" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "onlynet=tor" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "bind=127.0.0.1" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "listen=1" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "dnsseed=0" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                    sudo sh -c 'echo "### TOR CONF END ###" >> ${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf'
+                fi
             fi
         done
 
@@ -399,7 +445,6 @@ function create_systemd_configuration() {
     done
 
 }
-
 #
 # /* set all permissions to the masternode user */
 #
@@ -412,7 +457,6 @@ function set_permissions() {
     chmod -R g=u ${MNODE_CONF_BASE} ${MNODE_DATA_BASE} /var/log/sentinel &>> ${SCRIPT_LOGFILE}
 
 }
-
 #
 # /* wipe all files and folders generated by the script for a specific project */
 #
@@ -427,7 +471,6 @@ function wipe_all() {
     exit 0
 
 }
-
 #
 # /*
 # remove packages and stuff we don't need anymore and set some recommended
@@ -453,13 +496,10 @@ function cleanup_after() {
     echo "net.ipv4.tcp_syncookies=1" >> /etc/sysctl.conf &>> ${SCRIPT_LOGFILE}
     echo "net.ipv4.icmp_ignore_bogus_error_responses=1" >> /etc/sysctl.conf &>> ${SCRIPT_LOGFILE}
     sysctl -p
-
 }
-
 #
 # /* project as parameter, sources the project specific parameters and runs the main logic */
 #
-
 # source the default and desired crypto configuration files
 function source_config() {
 
@@ -489,7 +529,6 @@ function source_config() {
             release=${SCVERSION}
             echo "release empty, setting to project default: ${SCVERSION}"  &>> ${SCRIPT_LOGFILE}
         fi
-
         # net is from the default config but can ultimately be
         # overwritten at runtime
         if [ -z "${net}" ]; then
@@ -513,7 +552,6 @@ function source_config() {
                 exit 1
             fi
         fi
-
         echo "************************* Installation Plan *****************************************"
         echo ""
         if [ "$update" -eq 1 ]; then
@@ -528,6 +566,10 @@ function source_config() {
         if [ "$update" -eq 0 ]; then
             # only needed if fresh installation
             echo "You have to add your masternode private key to the individual config files afterwards"
+            echo ""
+        fi
+        if [ "$TOR" -eq 1 ]; then
+            echo "I am going to install and configure your masternode to use TOR"
             echo ""
         fi
         echo "Stay tuned!"
@@ -566,6 +608,9 @@ function source_config() {
             installUnattendedUpgrades
         fi
         install_packages
+        if [ "$TOR" -eq 1 ]; then
+            installTOR
+        fi
         print_logo
         build_mn_from_source
         if [ "$update" -eq 0 ]; then
@@ -789,11 +834,12 @@ function prepare_mn_interfaces() {
 wipe=0;
 debug=0;
 update=0;
+TOR=0;
 sentinel=0;
 startnodes=0;
 
 # Execute getopt
-ARGS=$(getopt -o "hp:n:c:r:wsudx" -l "help,project:,net:,count:,release:,wipe,sentinel,update,debug,startnodes" -n "install.sh" -- "$@");
+ARGS=$(getopt -o "hp:n:c:r:wsudx" -l "help,project:,net:,count:,release:,wipe,sentinel,update,TOR,debug,startnodes" -n "install.sh" -- "$@");
 
 #Bad arguments
 if [ $? -ne 0 ];
@@ -853,6 +899,10 @@ while true; do
         -u|--update)
             shift;
                     update="1";
+            ;;
+       -t|--TOR)
+            shift;
+                    TOR="1";
             ;;
         -d|--debug)
             shift;
