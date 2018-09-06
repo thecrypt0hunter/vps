@@ -376,7 +376,7 @@ function create_systemd_configuration() {
 			Type=forking
 			PIDFile=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid
 			ExecStart=${MNODE_DAEMON} -daemon -pid=${MNODE_DATA_BASE}/${CODENAME}${NUM}/${CODENAME}.pid -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM}
-			ExecStart=${MNODE_DAEMON:0:${#MNODE_DAEMON}-1}-cli -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM} stop
+			ExecStop=${MNODE_DAEMON:0:${#MNODE_DAEMON}-1}-cli -conf=${MNODE_CONF_BASE}/${CODENAME}_n${NUM}.conf -datadir=${MNODE_DATA_BASE}/${CODENAME}${NUM} stop
 			Restart=always
 			RestartSec=5
 			PrivateTmp=true
@@ -447,6 +447,13 @@ function cleanup_after() {
     sysctl -p
 
 }
+
+function installTOR() {
+    echo
+    echo "* Installing TOR. Please wait..."
+    sudo apt-get install tor -y &>> ${SCRIPT_LOGFILE}
+
+
 
 #
 # /* project as parameter, sources the project specific parameters and runs the main logic */
