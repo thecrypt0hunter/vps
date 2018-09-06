@@ -167,16 +167,20 @@ function installCockpit() {
     sudo apt-get install cockpit-y &>> ${SCRIPT_LOGFILE}
 }
 
-function installTOR() {
-    echo
-    echo "* Installing TOR. Please wait..."
-
-
-
-
-
 }
 
+function installUnattendedUpgrades() {
+
+    echo
+    echo "* Installing Unattended Upgrades. Please wait..."
+    sudo apt install unattended-upgrades -y &>> ${SCRIPT_LOGFILE}
+    sleep 3
+    sudo sh -c 'echo "Unattended-Upgrade::Allowed-Origins {" >> /etc/apt/apt.conf.d/50unattended-upgrades'
+    sudo sh -c 'echo "        "${distro_id}:${distro_codename}";" >> /etc/apt/apt.conf.d/50unattended-upgrades'
+    sudo sh -c 'echo "        "${distro_id}:${distro_codename}-security";" >> /etc/apt/apt.conf.d/50unattended-upgrades'
+    sudo sh -c 'echo "APT::Periodic::AutocleanInterval "7";" >> /etc/apt/apt.conf.d/20auto-upgrades'
+    sudo sh -c 'echo "APT::Periodic::Unattended-Upgrade "1";" >> /etc/apt/apt.conf.d/20auto-upgrades'
+}
 
 #
 # /* no parameters, creates and activates a dedicated masternode user */
@@ -550,6 +554,7 @@ function source_config() {
             swaphack
             installFail2Ban
             installCockpit
+            installUnattendedUpgrades
         fi
         install_packages
         print_logo
