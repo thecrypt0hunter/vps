@@ -458,6 +458,7 @@ function source_config() {
     SETUP_CONF_FILE="${SCRIPTPATH}/config/${project}/${project}.env"
 
     # first things first, to break early if things are missing or weird
+    check_root
     check_distro
 
     if [ -f ${SETUP_CONF_FILE} ]; then
