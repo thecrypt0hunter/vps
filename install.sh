@@ -173,8 +173,6 @@ function installCockpit() {
     sudo apt-get install cockpit-y &>> ${SCRIPT_LOGFILE}
 }
 
-}
-
 function installUnattendedUpgrades() {
 
     echo
