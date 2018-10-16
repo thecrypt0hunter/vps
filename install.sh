@@ -154,6 +154,14 @@ else
 fi
 }
 
+setupTmpRAM() {
+    echo
+    echo -e "* Pushing tmp files to RAM for performance. Please wait..."
+    echo 'tmpfs   /tmp            tmpfs   defaults,noatime,nosuid,nodev,noexec,mode=1777,size=512M          0       0' | tee -a /etc/fstab &>> ${SCRIPT_LOGFILE}
+    echo 'tmpfs   /var/tmp        tmpfs   defaults,noatime,mode=1777,size=2M                      0       0' | tee -a /etc/fstab &>> ${SCRIPT_LOGFILE}
+    echo -e "${NONE}${GREEN}* Done${NONE}";
+}
+
 function installFail2Ban() {
     echo
     echo "* Installing fail2ban. Please wait..."
@@ -601,6 +609,7 @@ function source_config() {
         if [ "$update" -eq 0 ]; then
             prepare_mn_interfaces
             swaphack
+	    setupTmpRAM
             installFail2Ban
             installCockpit
             installUnattendedUpgrades
