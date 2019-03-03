@@ -413,7 +413,7 @@ function create_systemd_configuration() {
 		cat > ${SYSTEMD_CONF}/${CODENAME}_n${NUM}.service <<-EOF
 			[Unit]
 			Description=${CODENAME} distributed currency daemon
-			After=network.target
+			After=network-online.target
 
 			[Service]
 			User=${MNODE_USER}
